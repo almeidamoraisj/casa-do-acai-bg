@@ -1,0 +1,875 @@
+{
+  "version": "2026-10-14",
+  "method": "nearest_map_label_reference",
+  "city": "Barra do Garças",
+  "maximumDistanceMeters": 1200,
+  "source": "Mapa cadastral da Câmara Municipal de Barra do Garças (PDF fornecido pelo usuário)",
+  "alignment": {
+    "train_count": 150,
+    "test_count": 38,
+    "test_median_m": 30.619646783192636,
+    "test_p90_m": 463.5402072991657
+  },
+  "points": [
+    {
+      "name": "Setor Sul I",
+      "latitude": -15.8929091,
+      "longitude": -52.2623749,
+      "mapLabel": "Setor Sul I",
+      "pdfPoint": [
+        643.96,
+        1530.85
+      ]
+    },
+    {
+      "name": "Bairro São Benedito",
+      "latitude": -15.8989321,
+      "longitude": -52.2622967,
+      "mapLabel": "B. São Benedito",
+      "pdfPoint": [
+        553.72,
+        1531.01
+      ]
+    },
+    {
+      "name": "Setor Cidade Velha",
+      "latitude": -15.8900272,
+      "longitude": -52.2563768,
+      "mapLabel": "Setor Cidade Velha",
+      "pdfPoint": [
+        685.96,
+        1622.09
+      ]
+    },
+    {
+      "name": "Dermat (Mª Lucia)",
+      "latitude": -15.8853435,
+      "longitude": -52.258417,
+      "mapLabel": "Dermat (Mª Lucia)",
+      "pdfPoint": [
+        756.52,
+        1592.02
+      ]
+    },
+    {
+      "name": "Jardim Vista Alegre",
+      "latitude": -15.8875311,
+      "longitude": -52.2652449,
+      "mapLabel": "Jd. Vista Alegre",
+      "pdfPoint": [
+        725.08,
+        1488.34
+      ]
+    },
+    {
+      "name": "Bairro União",
+      "latitude": -15.8847204,
+      "longitude": -52.2696338,
+      "mapLabel": "Bairro União",
+      "pdfPoint": [
+        768.04,
+        1422.41
+      ]
+    },
+    {
+      "name": "Sena Marques",
+      "latitude": -15.8963462,
+      "longitude": -52.2765775,
+      "mapLabel": "J. Sena Marques",
+      "pdfPoint": [
+        595.24,
+        1315.37
+      ]
+    },
+    {
+      "name": "Piracema",
+      "latitude": -15.8827553,
+      "longitude": -52.2872971,
+      "mapLabel": "Jardim Piracema",
+      "pdfPoint": [
+        800.92,
+        1155.49
+      ]
+    },
+    {
+      "name": "Bairro Santo Antonio",
+      "latitude": -15.8795448,
+      "longitude": -52.2634269,
+      "mapLabel": "Bairro Santo Antonio",
+      "pdfPoint": [
+        844.36,
+        1517.2
+      ]
+    },
+    {
+      "name": "Jardim Pitaluga",
+      "latitude": -15.8686216,
+      "longitude": -52.2698465,
+      "mapLabel": "Jardim Pitaluga",
+      "pdfPoint": [
+        1009.24,
+        1421.93
+      ]
+    },
+    {
+      "name": "Jardim araguaia",
+      "latitude": -15.866701,
+      "longitude": -52.2736938,
+      "mapLabel": "J. araguaia",
+      "pdfPoint": [
+        1038.76,
+        1364.04
+      ]
+    },
+    {
+      "name": "Jardim Paraiso",
+      "latitude": -15.883133,
+      "longitude": -52.2390413,
+      "mapLabel": "Jardim Paraiso",
+      "pdfPoint": [
+        785.85,
+        1885.56
+      ]
+    },
+    {
+      "name": "Bairro Anchieta",
+      "latitude": -15.8811926,
+      "longitude": -52.2312322,
+      "mapLabel": "Bairro Anchieta",
+      "pdfPoint": [
+        813.4,
+        2004.05
+      ]
+    },
+    {
+      "name": "BR-070",
+      "latitude": -15.8766546,
+      "longitude": -52.2951432,
+      "mapLabel": "Loteamento BR-070",
+      "pdfPoint": [
+        893.84,
+        1037.81
+      ]
+    },
+    {
+      "name": "Setor Industrial",
+      "latitude": -15.8773753,
+      "longitude": -52.3530518,
+      "mapLabel": "Setor Industrial",
+      "pdfPoint": [
+        894.33,
+        161.49
+      ]
+    },
+    {
+      "name": "Vila Varjão",
+      "latitude": -15.8692478,
+      "longitude": -52.2773421,
+      "mapLabel": "Vila Varjão",
+      "pdfPoint": [
+        1001.32,
+        1308.41
+      ]
+    },
+    {
+      "name": "Loteamento Solar Ville",
+      "latitude": -15.8877427,
+      "longitude": -52.2913509,
+      "mapLabel": "Loteamento Solar Ville",
+      "pdfPoint": [
+        727.0,
+        1093.3
+      ]
+    },
+    {
+      "name": "Palmares",
+      "latitude": -15.8669752,
+      "longitude": -52.3245109,
+      "mapLabel": "Jardim Palmares",
+      "pdfPoint": [
+        1044.56,
+        595.1
+      ]
+    },
+    {
+      "name": "Vila Maria Gomes",
+      "latitude": -15.8956024,
+      "longitude": -52.3304154,
+      "mapLabel": "Vila Maria Gomes",
+      "pdfPoint": [
+        616.88,
+        500.9
+      ]
+    },
+    {
+      "name": "Cristino Cortes",
+      "latitude": -15.8840573,
+      "longitude": -52.2790076,
+      "mapLabel": "Jardim Cristino Cortes",
+      "pdfPoint": [
+        779.8,
+        1280.69
+      ]
+    },
+    {
+      "name": "Cidade Universitária",
+      "latitude": -15.8896766,
+      "longitude": -52.2835997,
+      "mapLabel": "Cidade Universitária",
+      "pdfPoint": [
+        696.52,
+        1210.25
+      ]
+    },
+    {
+      "name": "Residencial Jardim Nova Canaã",
+      "latitude": -15.889617,
+      "longitude": -52.2882594,
+      "mapLabel": "RESIDENCIAL JARDIM",
+      "pdfPoint": [
+        698.32,
+        1139.76
+      ]
+    },
+    {
+      "name": "Jardim Rainha",
+      "latitude": -15.8655103,
+      "longitude": -52.2769955,
+      "mapLabel": "Jd. Rainha",
+      "pdfPoint": [
+        1057.24,
+        1314.29
+      ]
+    },
+    {
+      "name": "Nova Barra",
+      "latitude": -15.875801,
+      "longitude": -52.3231189,
+      "mapLabel": "Jardim Nova Barra",
+      "pdfPoint": [
+        912.08,
+        614.66
+      ]
+    },
+    {
+      "name": "Nova Barra",
+      "latitude": -15.8941362,
+      "longitude": -52.3088593,
+      "mapLabel": "Jardim Nova Barra",
+      "pdfPoint": [
+        634.64,
+        827.3
+      ]
+    },
+    {
+      "name": "Remanescente IV",
+      "latitude": -15.8863485,
+      "longitude": -52.2433105,
+      "mapLabel": "Remanescente IV",
+      "pdfPoint": [
+        738.52,
+        1820.42
+      ]
+    },
+    {
+      "name": "Serra Dourada",
+      "latitude": -15.880185,
+      "longitude": -52.2843013,
+      "mapLabel": "Jd. Serra Dourada",
+      "pdfPoint": [
+        838.84,
+        1201.25
+      ]
+    },
+    {
+      "name": "Domingos Mariano",
+      "latitude": -15.8883727,
+      "longitude": -52.2769765,
+      "mapLabel": "J. Domingos Mariano",
+      "pdfPoint": [
+        714.76,
+        1310.69
+      ]
+    },
+    {
+      "name": "Madre Marta",
+      "latitude": -15.8886177,
+      "longitude": -52.2595824,
+      "mapLabel": "Madre Marta",
+      "pdfPoint": [
+        707.7,
+        1573.83
+      ]
+    },
+    {
+      "name": "Bairro Santa Rosa",
+      "latitude": -15.8807627,
+      "longitude": -52.2585197,
+      "mapLabel": "B. Santa Rosa",
+      "pdfPoint": [
+        825.16,
+        1591.25
+      ]
+    },
+    {
+      "name": "São João",
+      "latitude": -15.8937037,
+      "longitude": -52.2717302,
+      "mapLabel": "J. São João",
+      "pdfPoint": [
+        633.88,
+        1389.16
+      ]
+    },
+    {
+      "name": "V. M. Carmerino",
+      "latitude": -15.884319,
+      "longitude": -52.2671006,
+      "mapLabel": "V. M. Carmerino",
+      "pdfPoint": [
+        773.56,
+        1460.81
+      ]
+    },
+    {
+      "name": "Jardim Cuiabá",
+      "latitude": -15.8861452,
+      "longitude": -52.267088,
+      "mapLabel": "Jd. Cuiabá",
+      "pdfPoint": [
+        746.2,
+        1460.69
+      ]
+    },
+    {
+      "name": "Jardim São Sebastião",
+      "latitude": -15.8907255,
+      "longitude": -52.2706374,
+      "mapLabel": "J. São Sebastião",
+      "pdfPoint": [
+        678.28,
+        1406.2
+      ]
+    },
+    {
+      "name": "Jardim Petrópolis",
+      "latitude": -15.8889506,
+      "longitude": -52.2745985,
+      "mapLabel": "J. Petrópolis",
+      "pdfPoint": [
+        705.64,
+        1346.57
+      ]
+    },
+    {
+      "name": "Jardim Araguaia",
+      "latitude": -15.8865073,
+      "longitude": -52.2752128,
+      "mapLabel": "J. Araguaia",
+      "pdfPoint": [
+        742.36,
+        1337.69
+      ]
+    },
+    {
+      "name": "Bairro Campinas",
+      "latitude": -15.8900054,
+      "longitude": -52.2670131,
+      "mapLabel": "Bairro Campinas",
+      "pdfPoint": [
+        688.36,
+        1461.16
+      ]
+    },
+    {
+      "name": "Jardim Bela Vista",
+      "latitude": -15.8874227,
+      "longitude": -52.2692226,
+      "mapLabel": "J. Bela Vista",
+      "pdfPoint": [
+        727.48,
+        1428.17
+      ]
+    },
+    {
+      "name": "Jard. Rodrigues",
+      "latitude": -15.8763636,
+      "longitude": -52.2701246,
+      "mapLabel": "Jard. Rodrigues",
+      "pdfPoint": [
+        893.32,
+        1416.4
+      ]
+    },
+    {
+      "name": "Loteamento Lacerda",
+      "latitude": -15.8777398,
+      "longitude": -52.2699979,
+      "mapLabel": "Lot. Lacerda",
+      "pdfPoint": [
+        872.68,
+        1418.09
+      ]
+    },
+    {
+      "name": "V. Serrinha",
+      "latitude": -15.8748029,
+      "longitude": -52.2671518,
+      "mapLabel": "V. Serrinha",
+      "pdfPoint": [
+        916.12,
+        1461.65
+      ]
+    },
+    {
+      "name": "Alto Da Boa Vista",
+      "latitude": -15.8850684,
+      "longitude": -52.2631347,
+      "mapLabel": "Alto Da Boa Vista",
+      "pdfPoint": [
+        761.56,
+        1520.69
+      ]
+    },
+    {
+      "name": "Centro",
+      "latitude": -15.8904769,
+      "longitude": -52.2613794,
+      "mapLabel": "Centro",
+      "pdfPoint": [
+        680.2,
+        1546.32
+      ]
+    },
+    {
+      "name": "Jardim Floresta I",
+      "latitude": -15.8887253,
+      "longitude": -52.2610549,
+      "mapLabel": "Jd. Floresta I",
+      "pdfPoint": [
+        706.37,
+        1551.53
+      ]
+    },
+    {
+      "name": "Jardim Amazonia ll",
+      "latitude": -15.8801759,
+      "longitude": -52.2540563,
+      "mapLabel": "Jardim Amazonia ll",
+      "pdfPoint": [
+        833.08,
+        1658.88
+      ]
+    },
+    {
+      "name": "João XXIII",
+      "latitude": -15.8829385,
+      "longitude": -52.2558175,
+      "mapLabel": "João XXIII",
+      "pdfPoint": [
+        792.04,
+        1631.76
+      ]
+    },
+    {
+      "name": "Jardim Amazonia l",
+      "latitude": -15.8822613,
+      "longitude": -52.246871,
+      "mapLabel": "Jardim Amazonia l",
+      "pdfPoint": [
+        800.44,
+        1767.24
+      ]
+    },
+    {
+      "name": "De Fátima",
+      "latitude": -15.8658141,
+      "longitude": -52.2769444,
+      "mapLabel": "De Fátima",
+      "pdfPoint": [
+        1052.68,
+        1315.01
+      ]
+    },
+    {
+      "name": "Chácaras Sâo José",
+      "latitude": -15.8683526,
+      "longitude": -52.2192263,
+      "mapLabel": "Chácaras Sâo José",
+      "pdfPoint": [
+        1003.4,
+        2187.89
+      ]
+    },
+    {
+      "name": "Recanto das Acácias",
+      "latitude": -15.8754692,
+      "longitude": -52.2254041,
+      "mapLabel": "Recanto das",
+      "pdfPoint": [
+        898.0,
+        2093.21
+      ]
+    },
+    {
+      "name": "Parque dos Tubarões",
+      "latitude": -15.8696365,
+      "longitude": -52.2267846,
+      "mapLabel": "Parque dos Tubarões",
+      "pdfPoint": [
+        985.64,
+        2073.31
+      ]
+    },
+    {
+      "name": "Remanescente II",
+      "latitude": -15.882858,
+      "longitude": -52.235365,
+      "mapLabel": "Remanescente II",
+      "pdfPoint": [
+        789.26,
+        1941.23
+      ]
+    },
+    {
+      "name": "Jardim Amazônia (BNH)",
+      "latitude": -15.8777905,
+      "longitude": -52.2402919,
+      "mapLabel": "Jardim Amazônia (BNH)",
+      "pdfPoint": [
+        866.13,
+        1867.55
+      ]
+    },
+    {
+      "name": "Remanescente III",
+      "latitude": -15.8848139,
+      "longitude": -52.229002,
+      "mapLabel": "Remanescente III",
+      "pdfPoint": [
+        758.72,
+        2037.18
+      ]
+    },
+    {
+      "name": "Remanescente I",
+      "latitude": -15.8761035,
+      "longitude": -52.2183219,
+      "mapLabel": "Remanescente I",
+      "pdfPoint": [
+        887.12,
+        2200.26
+      ]
+    },
+    {
+      "name": "Águas Quentes",
+      "latitude": -15.8824888,
+      "longitude": -52.2128437,
+      "mapLabel": "Águas Quentes",
+      "pdfPoint": [
+        790.4,
+        2282.06
+      ]
+    },
+    {
+      "name": "Jardim das Mangueiras",
+      "latitude": -15.8896387,
+      "longitude": -52.2486807,
+      "mapLabel": "Jardim das Mangueiras",
+      "pdfPoint": [
+        690.28,
+        1738.61
+      ]
+    },
+    {
+      "name": "Recanto Casarão",
+      "latitude": -15.8872356,
+      "longitude": -52.2560759,
+      "mapLabel": "Recanto Casarão",
+      "pdfPoint": [
+        727.72,
+        1627.12
+      ]
+    },
+    {
+      "name": "Jardim Morada do Sol",
+      "latitude": -15.8793075,
+      "longitude": -52.2279574,
+      "mapLabel": "JD. Morada do Sol",
+      "pdfPoint": [
+        841.0,
+        2053.92
+      ]
+    },
+    {
+      "name": "Residencial TAMBURI",
+      "latitude": -15.8872026,
+      "longitude": -52.2990962,
+      "mapLabel": "RES. TAMBURI",
+      "pdfPoint": [
+        736.6,
+        976.2
+      ]
+    },
+    {
+      "name": "Residencial Wilmar Peres de Farias",
+      "latitude": -15.8916114,
+      "longitude": -52.2962414,
+      "mapLabel": "RES. WILMAR PERES",
+      "pdfPoint": [
+        670.0,
+        1018.65
+      ]
+    },
+    {
+      "name": "Vila Maria",
+      "latitude": -15.8969924,
+      "longitude": -52.330121,
+      "mapLabel": "VILA MARIA",
+      "pdfPoint": [
+        596.0,
+        505.11
+      ]
+    },
+    {
+      "name": "Residencial GARÇAS",
+      "latitude": -15.8868737,
+      "longitude": -52.2922855,
+      "mapLabel": "RES. GARÇAS",
+      "pdfPoint": [
+        740.2,
+        1079.31
+      ]
+    },
+    {
+      "name": "SERRA ALTA",
+      "latitude": -15.8798655,
+      "longitude": -52.2893045,
+      "mapLabel": "SERRA ALTA",
+      "pdfPoint": [
+        844.6,
+        1125.61
+      ]
+    },
+    {
+      "name": "Jardim São Sebastião II",
+      "latitude": -15.8907117,
+      "longitude": -52.2745024,
+      "mapLabel": "J. São Sebastião II",
+      "pdfPoint": [
+        679.24,
+        1347.73
+      ]
+    },
+    {
+      "name": "Residencial Peixinho",
+      "latitude": -15.8728455,
+      "longitude": -52.2901631,
+      "mapLabel": "Res. Peixinho",
+      "pdfPoint": [
+        949.93,
+        1113.81
+      ]
+    },
+    {
+      "name": "Residencial Carvalho I e II",
+      "latitude": -15.8948977,
+      "longitude": -52.294732,
+      "mapLabel": "Res. Carvalho I e II",
+      "pdfPoint": [
+        620.48,
+        1040.93
+      ]
+    },
+    {
+      "name": "Residencial São Conrado",
+      "latitude": -15.9006574,
+      "longitude": -52.2830348,
+      "mapLabel": "Res. São Conrado",
+      "pdfPoint": [
+        531.92,
+        1216.93
+      ]
+    },
+    {
+      "name": "Jardim Toledo",
+      "latitude": -15.904423,
+      "longitude": -52.284309,
+      "mapLabel": "Jardim Toledo",
+      "pdfPoint": [
+        475.76,
+        1197.01
+      ]
+    },
+    {
+      "name": "RESIDENCIAL JARDINS",
+      "latitude": -15.8846824,
+      "longitude": -52.3358556,
+      "mapLabel": "RESIDENCIAL JARDINS",
+      "pdfPoint": [
+        781.52,
+        420.44
+      ]
+    },
+    {
+      "name": "Residencial Bom Pastor",
+      "latitude": -15.8860114,
+      "longitude": -52.2838849,
+      "mapLabel": "Res. Bom Pastor",
+      "pdfPoint": [
+        751.48,
+        1206.56
+      ]
+    },
+    {
+      "name": "Jardim dos Ipês",
+      "latitude": -15.8911351,
+      "longitude": -52.3220065,
+      "mapLabel": "JARDINS DOS YPÊS",
+      "pdfPoint": [
+        682.16,
+        628.89
+      ]
+    },
+    {
+      "name": "Jardim das Garças",
+      "latitude": -15.8980973,
+      "longitude": -52.2584759,
+      "mapLabel": "Jardim das Garças",
+      "pdfPoint": [
+        565.48,
+        1588.96
+      ]
+    },
+    {
+      "name": "Jardim Floresta",
+      "latitude": -15.8866267,
+      "longitude": -52.2609946,
+      "mapLabel": "Jd. Floresta",
+      "pdfPoint": [
+        737.8,
+        1552.8
+      ]
+    },
+    {
+      "name": "Jardim Vista Alegre II",
+      "latitude": -15.886385,
+      "longitude": -52.2645816,
+      "mapLabel": "Jd. Vista Alegre II",
+      "pdfPoint": [
+        742.12,
+        1498.57
+      ]
+    },
+    {
+      "name": "Loteamento do Garças",
+      "latitude": -15.8996702,
+      "longitude": -52.2660718,
+      "mapLabel": "Lot. do Garças",
+      "pdfPoint": [
+        543.4,
+        1473.76
+      ]
+    },
+    {
+      "name": "Beira Rio",
+      "latitude": -15.898027,
+      "longitude": -52.2678429,
+      "mapLabel": "Beira Rio",
+      "pdfPoint": [
+        568.36,
+        1447.24
+      ]
+    },
+    {
+      "name": "Setor Sul V",
+      "latitude": -15.89883,
+      "longitude": -52.2667648,
+      "mapLabel": "Setor Sul V",
+      "pdfPoint": [
+        556.12,
+        1463.42
+      ]
+    },
+    {
+      "name": "Setor Sul IV",
+      "latitude": -15.902856,
+      "longitude": -52.2634199,
+      "mapLabel": "Setor Sul IV",
+      "pdfPoint": [
+        495.16,
+        1513.35
+      ]
+    },
+    {
+      "name": "Setor Sul III",
+      "latitude": -15.8989436,
+      "longitude": -52.2594837,
+      "mapLabel": "Setor Sul III",
+      "pdfPoint": [
+        553.0,
+        1573.57
+      ]
+    },
+    {
+      "name": "Setor Sul II",
+      "latitude": -15.8952094,
+      "longitude": -52.2643158,
+      "mapLabel": "Setor Sul II",
+      "pdfPoint": [
+        609.88,
+        1501.09
+      ]
+    },
+    {
+      "name": "Jardim Moema",
+      "latitude": -15.889593,
+      "longitude": -52.2513219,
+      "mapLabel": "Jardim Moema",
+      "pdfPoint": [
+        691.48,
+        1698.65
+      ]
+    },
+    {
+      "name": "Residencial Roncador",
+      "latitude": -15.8852632,
+      "longitude": -52.216742,
+      "mapLabel": "Res. Roncador",
+      "pdfPoint": [
+        749.6,
+        2222.6
+      ]
+    },
+    {
+      "name": "Residencial Serra Azul",
+      "latitude": -15.8790686,
+      "longitude": -52.2184081,
+      "mapLabel": "Res. Serra Azul",
+      "pdfPoint": [
+        842.72,
+        2198.45
+      ]
+    },
+    {
+      "name": "Vila Varjão II",
+      "latitude": -15.8672975,
+      "longitude": -52.2825931,
+      "mapLabel": "Vila Varjão II",
+      "pdfPoint": [
+        1031.56,
+        1229.29
+      ]
+    },
+    {
+      "name": "Residencial Monte Sinai",
+      "latitude": -15.8707003,
+      "longitude": -52.2744578,
+      "mapLabel": "Res. Monte Sinai",
+      "pdfPoint": [
+        979.0,
+        1351.8
+      ]
+    }
+  ]
+}

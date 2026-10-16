@@ -1,0 +1,191 @@
+{
+  "matrix_meters_per_pdf_point": [
+    [
+      -0.08030809261660717,
+      7.075455296628271
+    ],
+    [
+      7.430207212880048,
+      0.09572877049688197
+    ]
+  ],
+  "offset_meters": [
+    -1173.8340623668416,
+    -318.8580910864811
+  ],
+  "pdf_center": [
+    800,
+    1100
+  ],
+  "geo_reference_lon_lat": [
+    -52.28,
+    -15.88
+  ],
+  "meters_per_degree": [
+    107071.68156645769,
+    111320.0
+  ],
+  "train_count": 150,
+  "test_count": 38,
+  "status": "PRELIMINARY_NOT_VALIDATED",
+  "train_median_m": 31.82085334418901,
+  "train_p90_m": 205.50132552958422,
+  "train_within_50m": 104,
+  "test_median_m": 30.619646783192636,
+  "test_p90_m": 463.5402072991657,
+  "test_within_50m": 24,
+  "samples": [
+    {
+      "road": "Rua Indepen dência",
+      "error_m": 1.2
+    },
+    {
+      "road": "Rua Das Rosas",
+      "error_m": 81.3
+    },
+    {
+      "road": "Rua  Das  Orquideas",
+      "error_m": 46.5
+    },
+    {
+      "road": "Av.         Amazonas",
+      "error_m": 31.6
+    },
+    {
+      "road": "Rua Vitória Régia",
+      "error_m": 26.4
+    },
+    {
+      "road": "Rua d as Azaléias",
+      "error_m": 2362.0
+    },
+    {
+      "road": "Rua Geraldo Pereira",
+      "error_m": 431.4
+    },
+    {
+      "road": "Rua  Valdir  Ra belo",
+      "error_m": 538.5
+    },
+    {
+      "road": "Travessa      Vista       Alegre",
+      "error_m": 17.7
+    },
+    {
+      "road": "Rua Dos Garimpeiros",
+      "error_m": 4.4
+    },
+    {
+      "road": "Rua Pires DE Campos",
+      "error_m": 3.3
+    },
+    {
+      "road": "Rua   Presidente      Vargas",
+      "error_m": 29.5
+    },
+    {
+      "road": "Rua Castro  Alves",
+      "error_m": 11.5
+    },
+    {
+      "road": "Rua Germano Bezerra",
+      "error_m": 29.6
+    },
+    {
+      "road": "Rua Dom Aquino",
+      "error_m": 20.8
+    },
+    {
+      "road": "Rua Campo Grande",
+      "error_m": 218.4
+    },
+    {
+      "road": "Rua Joana Cristino Cortes",
+      "error_m": 11.1
+    },
+    {
+      "road": "Rua Horácio de      Souza",
+      "error_m": 38.8
+    },
+    {
+      "road": "Rua         São         Benedito",
+      "error_m": 2.1
+    },
+    {
+      "road": "Rua Valdir Rabelo",
+      "error_m": 8.4
+    },
+    {
+      "road": "RUA  SÃO  BENEDITO",
+      "error_m": 7.3
+    },
+    {
+      "road": "Rua      Carlos      Chagas",
+      "error_m": 2.1
+    },
+    {
+      "road": "Rua        São     Sebastião",
+      "error_m": 11.9
+    },
+    {
+      "road": "Rua                      Campinas",
+      "error_m": 4.6
+    },
+    {
+      "road": "Av. Brasilia",
+      "error_m": 23.4
+    },
+    {
+      "road": "Rua  Arnaldo  Martins",
+      "error_m": 65.6
+    },
+    {
+      "road": "Rua  Antônio  Weber Morosini",
+      "error_m": 47.0
+    },
+    {
+      "road": "Rua Nossa Senhora Aparecida",
+      "error_m": 185.6
+    },
+    {
+      "road": "Rua     Maria    Madalena",
+      "error_m": 166.0
+    },
+    {
+      "road": "Rua M anoel  Cam eri no de Carvalho",
+      "error_m": 48.3
+    },
+    {
+      "road": "Rua Das Hortências",
+      "error_m": 70.9
+    },
+    {
+      "road": "Rua Basílio Dourado",
+      "error_m": 5.1
+    },
+    {
+      "road": "Rua Man oel Pereira Brito",
+      "error_m": 139.5
+    },
+    {
+      "road": "Av. M arechal Rondon",
+      "error_m": 1727.5
+    },
+    {
+      "road": "Rua    Santa Rita",
+      "error_m": 134.6
+    },
+    {
+      "road": "Av Sa l om e  Jo sé Rodrigues",
+      "error_m": 5.5
+    },
+    {
+      "road": "Rua Matrinc hã",
+      "error_m": 8569.4
+    },
+    {
+      "road": "Rua Nossa Senhora Aparecida",
+      "error_m": 113.2
+    }
+  ]
+}

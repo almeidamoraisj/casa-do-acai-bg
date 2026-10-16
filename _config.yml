@@ -1,0 +1,8 @@
+# Impede o Pages de processar arquivos da automação Windows como páginas.
+exclude:
+  - automacao-windows
+  - node_modules
+  - vendor
+  - PUBLICAR-GITHUB.md
+  - GOOGLE-MAPS-LEIA-ME.md
+  - MAPEAMENTO-BAIRROS.md

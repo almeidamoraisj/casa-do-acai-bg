@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Casa do Açaí BG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=94af6a557d74">
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="brand"><span class="brand-casa">Casa do</span> Açaí <span class="brand-bg">BG</span></div>
+    <button class="nav-cta" onclick="openCart()">
+      <span class="cart-ico">🛒</span> Carrinho
+    </button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-blob"></div>
+  <div class="hero-content">
+    <div class="hero-hours" aria-label="Funcionamento: segunda, quarta, quinta, sexta, sábado e domingo, das 14h às 23h">
+      <span>SEG · QUA · QUI · SEX · SÁB · DOM</span><span>14H ÀS 23H</span>
+    </div>
+    <img class="hero-logo" src="assets/marca/logo-casa-acai.webp" alt="Casa do Açaí BG" width="640" height="640" fetchpriority="high" decoding="async">
+    <h1>Açaí de verdade,<br><span>sem economia</span> de fruta.</h1>
+    <p class="sub">Marmitas de 750ml, copos de 300 a 600ml e o Copo da Casa — tudo montado na hora, do jeito que você pedir.</p>
+    <div class="hero-actions">
+      <a href="#marmitas" class="btn-primary">Marmitas</a>
+      <a href="#copos" class="btn-ghost">Copos</a>
+    </div>
+
+  </div>
+  <div class="hero-fruits" aria-hidden="true">
+    <span class="fruit f1">🍓</span>
+    <span class="fruit f2">🥝</span>
+    <span class="fruit f3">🍌</span>
+  </div>
+</section>
+
+<section class="delivery-strip">
+  <div class="wrap">
+    <p><b>Entrega grátis em 19 bairros.</b> Selecione o bairro ao finalizar para conferir a taxa.</p>
+  </div>
+</section>
+
+<section class="menu-section" id="marmitas">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">750 ml</span>
+      <h2>Marmitas</h2>
+      <p class="section-desc">R$ 40,00 — Escolha sua marmita e abra para selecionar os adicionais.</p>
+    </div>
+    <div class="card-grid" id="marmitasGrid"></div>
+  </div>
+</section>
+
+<section class="menu-section alt" id="copos">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">300 · 480 · 600 ml</span>
+      <h2>Copos</h2>
+      <p class="section-desc">Escolha um tamanho para abrir os adicionais e montar seu copo.</p>
+    </div>
+    <div class="card-grid" id="coposGrid"></div>
+  </div>
+</section>
+
+<section class="menu-section" id="casa">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">A casa manda</span>
+      <h2>Copo da Casa</h2>
+    </div>
+    <div class="casa-feature" id="casaFeature"></div>
+  </div>
+</section>
+
+<section class="wrap" id="pedir">
+  <div class="order-cta">
+    <h2>Bateu a vontade?</h2>
+    <p>Monta seu pedido no cardápio acima e confirma aqui. A mensagem já chega prontinha no nosso WhatsApp.</p>
+    <button class="btn-primary" onclick="openCart()">Montar meu pedido</button>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h5>Casá do Açaí BG</h5>
+        <p>Delivery em Barra do Garças, MT</p>
+      </div>
+      <div>
+        <h5>Horário</h5>
+        <li>Todos os dias</li>
+        <li>14h às 23h</li>
+      </div>
+      <div>
+        <h5>Contato</h5>
+        <li>(66) 99260-0308</li>
+        <li>@casa_do_acaibg</li>
+      </div>
+    </div>
+    <div class="footer-bottom">Casa do Açaí BG — açaí, cupuaçu e muita fruta de verdade.</div>
+  </div>
+</footer>
+
+<!-- Barra flutuante do carrinho -->
+<div class="cart-bar" id="cartBar">
+  <div class="cart-info"><b id="cartBarCount">0</b> item(ns) · <b id="cartBarTotal">R$ 0</b></div>
+  <button class="cart-open" onclick="openCart()">Ver pedido</button>
+</div>
+
+<!-- Painel do carrinho -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-label="Carrinho de pedido">
+  <div class="cart-head">
+    <h3>Seu pedido</h3>
+    <button class="cart-close" onclick="closeCart()" aria-label="Fechar carrinho">✕</button>
+  </div>
+
+  <div class="cart-scroll">
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty">Seu carrinho está vazio.<br>Escolhe um açaí no cardápio 🍇</div>
+    </div>
+
+    <form class="cart-form" onsubmit="return false;">
+      <label>Nome
+        <input type="text" id="custName" placeholder="Seu nome completo" oninput="updateConfirmState()">
+      </label>
+
+      <label>Forma de pagamento
+        <select id="custPayment" onchange="updateConfirmState()">
+          <option value="" selected disabled>Selecione</option>
+          <option value="Pix">Pix</option>
+          <option value="Dinheiro">Dinheiro</option>
+          <option value="Cartão de crédito">Cartão de crédito</option>
+          <option value="Cartão de débito">Cartão de débito</option>
+        </select>
+      </label>
+
+      <div id="cashChangePanel" hidden>
+        <label for="custChange">Troco para quanto?
+          <input id="custChange" type="text" inputmode="decimal" maxlength="16" placeholder="Ex.: 100,00" oninput="updateConfirmState()" aria-describedby="cashChangeHelp cashChangeError">
+        </label>
+        <p id="cashChangeHelp" class="delivery-help">Deixe vazio se não precisar de troco.</p>
+        <p id="cashChangeError" class="cash-change-error" role="status" aria-live="polite"></p>
+      </div>
+
+      <fieldset class="delivery-options">
+        <legend>Onde vamos entregar?</legend>
+        <div class="delivery-buttons">
+          <button type="button" id="deliveryCurrent" aria-pressed="false" onclick="selectDelivery('current')">Enviar para meu local</button>
+          <button type="button" id="deliveryOther" aria-pressed="false" onclick="selectDelivery('other')">Enviar para outro local</button>
+        </div>
+        <div id="locationPanel" hidden>
+          <p id="locationStatus" role="status" aria-live="polite"></p>
+          <a id="locationMap" target="_blank" rel="noopener noreferrer" hidden>Conferir localização no mapa</a>
+          <button type="button" id="locationRetry" onclick="selectDelivery('current')" hidden>Tentar novamente</button>
+          <label>Endereço da entrega
+            <input id="currentAddress" type="text" placeholder="Nome da rua - Bairro - Cidade" oninput="syncCurrentAddress()">
+          </label>
+          <p id="addressStatus" class="delivery-help" role="status" aria-live="polite"></p>
+          <p class="delivery-help">Endereço: Google Maps, BigDataCloud e © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a></p>
+          <label class="location-check"><input id="locationVerified" type="checkbox" onchange="updateConfirmState()"> Conferi o ponto no mapa e o endereço de entrega.</label>
+          <p class="delivery-help">Confira se esta é a localização da entrega. Para entregar em outro endereço, escolha “Enviar para outro local”.</p>
+        </div>
+        <div id="addressPanel" hidden>
+          <label>Endereço de entrega
+            <textarea id="custAddress" rows="3" placeholder="Rua - Bairro - Cidade" oninput="syncOtherAddress()"></textarea>
+          </label>
+          <label>Complemento (opcional)
+            <input id="custComplement" type="text" placeholder="Apartamento, bloco ou ponto de referência">
+          </label>
+        </div>
+        <details id="deliveryCorrection" class="delivery-correction">
+          <summary>Conferir ou corrigir bairro e cidade</summary>
+        <label>Cidade da entrega
+          <select id="deliveryCity" onchange="updateNeighborhood()">
+            <option value="">Selecione a cidade</option>
+            <option>Barra do Garças</option><option>Pontal do Araguaia</option><option>Aragarças</option>
+          </select>
+        </label>
+        <label>Bairro da entrega
+          <select id="deliveryNeighborhood" onchange="updateNeighborhood()"></select>
+        </label>
+        <label id="otherNeighborhoodLabel" hidden>Nome do bairro
+          <input id="otherNeighborhood" placeholder="Digite seu bairro" oninput="updateNeighborhood()">
+        </label>
+        </details>
+        <p id="deliveryFeeStatus" class="delivery-help" role="status">Identificando a região da entrega…</p>
+      </fieldset>
+
+      <label>Observação (opcional)
+        <textarea id="custNote" rows="2" placeholder="Ex: sem morango, tocar interfone, ponto de referência..."></textarea>
+      </label>
+
+      <div class="location-note">
+        <span class="pin">📍</span>
+        <p>O local de entrega será incluído abaixo do pedido. Ao abrir o WhatsApp, toque em <b>Enviar</b> para concluir.</p>
+      </div>
+    </form>
+  </div>
+
+  <div class="cart-foot">
+    <div class="delivery-summary"><span>Produtos</span><b id="cartProductsTotal">R$ 0,00</b></div>
+    <div class="delivery-summary"><span>Entrega</span><b id="cartDeliveryFee">Selecione o local</b></div>
+    <div class="cart-total-row">
+      <span>Total</span>
+      <b id="cartTotal">R$ 0</b>
+    </div>
+    <button class="cart-confirm" id="cartConfirmBtn" onclick="confirmOrder()" disabled>Confirmar pedido no WhatsApp</button>
+    <div class="cart-hint">Preencha nome, pagamento e local de entrega para liberar o envio.</div>
+  </div>
+</aside>
+
+<script src="google-maps-config.js?v=c1c6724085e7"></script>
+<script src="bairros-referencia.js?v=4c36b80827c0"></script>
+<script src="script.js?v=beec85511e11"></script>
+</body>
+</html>
