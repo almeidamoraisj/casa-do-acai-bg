@@ -406,9 +406,26 @@ async function googleLocation(location,signal) {
     });
   });
 }
+function priorityNeighborhood(location, city) {
+  const areas = window.CASA_NEIGHBORHOOD_REFERENCES?.priorityAreas || [];
+  if (city !== 'Barra do Garças' || !Number.isFinite(location.latitude) || !Number.isFinite(location.longitude)) return null;
+  const x=location.longitude,y=location.latitude;
+  for (const area of areas) {
+    if (area.city !== city || !Array.isArray(area.polygon) || area.polygon.length<3) continue;
+    let inside=false;
+    for(let i=0,j=area.polygon.length-1;i<area.polygon.length;j=i++) {
+      const [yi,xi]=area.polygon[i], [yj,xj]=area.polygon[j];
+      if((yi>y)!==(yj>y) && x<(xj-xi)*(y-yi)/(yj-yi)+xi) inside=!inside;
+    }
+    if(inside)return {name:area.name,distanceMeters:0,source:'referência da loja'};
+  }
+  return null;
+}
 function mappedNeighborhood(location, city) {
   const data = window.CASA_NEIGHBORHOOD_REFERENCES;
   if (city !== 'Barra do Garças' || !data || !Number.isFinite(location.latitude) || !Number.isFinite(location.longitude)) return null;
+  const priority=priorityNeighborhood(location,city);
+  if(priority)return priority;
   const radians = degrees => degrees * Math.PI / 180;
   let nearest = null;
   for (const point of data.points) {
@@ -497,6 +514,12 @@ async function fillLocationAddress(location, requestId) {
       }
       // Não congela respostas incompletas: uma nova tentativa consulta de novo.
       if (address.city && (address.city !== 'Barra do Garças' || address.neighborhood)) addressCache.set(key, address);
+    }
+    // Corrige também resultados completos do Google e respostas já em cache.
+    const priority=priorityNeighborhood(location,address.city);
+    if(priority) {
+      address={...address,neighborhood:priority.name,neighborhoodApproximate:true,neighborhoodSource:priority.source};
+      addressCache.set(key,address);
     }
     if (requestId !== locationRequestId || deliveryMode !== 'current') return;
     deliveryAddressParts = {...address};
