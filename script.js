@@ -13,13 +13,21 @@ function suggestCity(value) {
 function deliveryFee() {
   const city=document.getElementById('deliveryCity').value;
   if (!city) return null;
-  if (city==='Pontal do Araguaia') return 10;
-  if (city==='Aragarças') return 13;
+  if (isRouteCity(city)) {
+    const target=deliveryRouteTarget();
+    if (!target || deliveryRoute.key!==target.key || deliveryRoute.status!=='ready') return null;
+    return window.CASA_DELIVERY_ROUTES?.feeForDistance(city,deliveryRoute.distanceMeters) ?? null;
+  }
   if (city==='Barra do Garças') return !selectedNeighborhood() ? null : matchNeighborhood(selectedNeighborhood()) ? 0 : 6;
   return null;
 }
 function orderTotal() { return cartTotal() + (deliveryFee() ?? 0); }
 function syncOtherAddress() {
+  if (manualDeliveryAddressAtPin!==document.getElementById('custAddress').value.trim()) {
+    manualDeliveryLocation=null;
+    document.getElementById('deliveryPinStatus').textContent='';
+    document.getElementById('deliveryPinPanel').hidden=true;
+  }
   const parts=document.getElementById('custAddress').value.split(' - ').map(value=>value.trim());
   suggestCity(canonicalCity(parts.at(-1)));
   suggestNeighborhood(parts.length>=3 ? parts[1] : '');
@@ -36,10 +44,12 @@ function updateNeighborhood() {
   const other=document.getElementById('deliveryNeighborhood').value==='other';
   document.getElementById('otherNeighborhoodLabel').hidden=!other;
   const neighborhood=selectedNeighborhood();
+  document.getElementById('deliveryPinOpen').hidden=!(deliveryMode==='other' && isRouteCity(document.getElementById('deliveryCity').value) && usesInternalRoutes());
+  refreshDeliveryRoute();
   const fee=deliveryFee();
   document.getElementById('deliveryCorrection').hidden = deliveryMode === 'current';
-  document.getElementById('deliveryCorrection').open = fee === null && deliveryMode !== 'current';
-  document.getElementById('deliveryFeeStatus').textContent=fee===null ? (deliveryMode === 'current' ? 'Aguardando identificação automática do bairro e da cidade.' : 'Selecione a cidade e o bairro da entrega.') : fee===0 ? 'Entrega grátis para este bairro.' : `Taxa de entrega: ${fmtBRL(fee)}`;
+  document.getElementById('deliveryCorrection').open = fee === null && deliveryMode !== 'current' && !isRouteCity(document.getElementById('deliveryCity').value);
+  document.getElementById('deliveryFeeStatus').textContent=isRouteCity(document.getElementById('deliveryCity').value) ? routeFeeStatus() : fee===null ? (deliveryMode === 'current' ? 'Aguardando identificação automática do bairro e da cidade.' : 'Selecione a cidade e o bairro da entrega.') : fee===0 ? 'Entrega grátis para este bairro.' : `Taxa de entrega: ${fmtBRL(fee)}`;
   renderCartBar();
   updateConfirmState();
 }
@@ -296,6 +306,153 @@ function stopLocationCapture() {
   locationWatch = null; locationTimer = null;
 }
 
+// Taxas por percurso: somente Pontal e Aragarças; não usa raio em linha reta.
+let manualDeliveryLocation=null;
+let manualDeliveryAddressAtPin='';
+let manualDeliveryCityAtPin='';
+function usesInternalRoutes() { return window.CASA_DELIVERY_ROUTES?.provider?.()!=='google'; }
+async function openDeliveryPin() {
+  const city=document.getElementById('deliveryCity').value,address=document.getElementById('custAddress').value.trim();
+  const status=document.getElementById('deliveryPinStatus');
+  if(!isRouteCity(city)||!address){status.textContent='Informe o endereço e a cidade antes de marcar o ponto.';return;}
+  status.textContent='Carregando mapa da entrega…';
+  try {
+    await window.CASA_DELIVERY_MAP.show({city,address,selected:manualDeliveryLocation,onSelect:location=>{
+      // Ignora o mapa se o cliente tiver mudado de endereço enquanto ele carregava.
+      if(deliveryMode!=='other'||document.getElementById('custAddress').value.trim()!==address||document.getElementById('deliveryCity').value!==city)return;
+      manualDeliveryLocation=location;manualDeliveryAddressAtPin=address;manualDeliveryCityAtPin=city;
+      status.textContent='Ponto da entrega marcado. Confira a taxa abaixo.';
+      resetDeliveryRoute();updateNeighborhood();
+    }});
+    status.textContent='Marque a entrega e confirme o ponto no mapa.';
+  } catch(error) {status.textContent='Não foi possível abrir o mapa. Toque em “Marcar entrega no mapa” para tentar novamente.';}
+}
+let deliveryRoute = {key:'',status:'idle',distanceMeters:null};
+let deliveryRouteSerial = 0;
+let deliveryRouteTimer = null;
+let deliveryRouteController = null;
+let deliveryRouteTask = null;
+const deliveryRouteCache = new Map();
+function isRouteCity(city) { return city==='Pontal do Araguaia' || city==='Aragarças'; }
+function deliveryRouteTarget() {
+  const city=document.getElementById('deliveryCity').value;
+  if (!isRouteCity(city)) return null;
+  let destination;
+  if (deliveryMode==='current' && deliveryLocation && Number.isFinite(deliveryLocation.latitude) && Number.isFinite(deliveryLocation.longitude)) {
+    destination={location:{latitude:deliveryLocation.latitude,longitude:deliveryLocation.longitude}};
+  } else if (deliveryMode==='other') {
+    const address=document.getElementById('custAddress').value.trim().replace(/\s+/g,' ');
+    if (!address) return null;
+    destination={address};
+    if (usesInternalRoutes() && manualDeliveryLocation && manualDeliveryAddressAtPin===document.getElementById('custAddress').value.trim() && manualDeliveryCityAtPin===city) destination.location={...manualDeliveryLocation};
+  } else return null;
+  return {city,...destination,key:JSON.stringify([city,deliveryMode,destination])};
+}
+function resetDeliveryRoute() {
+  deliveryRouteSerial++;
+  if (deliveryRouteTimer!==null) clearTimeout(deliveryRouteTimer);
+  deliveryRouteTimer=null;
+  if (deliveryRouteController) deliveryRouteController.abort();
+  deliveryRouteController=null; deliveryRouteTask=null;
+  deliveryRoute={key:'',status:'idle',distanceMeters:null};
+}
+function routeFeeStatus() {
+  if (deliveryRoute.status==='waiting') return 'Marque o ponto da entrega no mapa para calcular a taxa.';
+  if (deliveryRoute.status==='pending') return 'Calculando o percurso da Praça do Relógio até a entrega…';
+  if (deliveryRoute.status==='error') return 'Não foi possível calcular a entrega. Confira o endereço ou toque em “Recalcular entrega”.';
+  if (deliveryRoute.status==='ready' && deliveryFee()!==null) {
+    if(deliveryRoute.distanceKind==='minimum')return `Entrega fora da faixa próxima da Praça do Relógio. Taxa de entrega: ${fmtBRL(deliveryFee())}.`;
+    const distance=(deliveryRoute.distanceMeters/1000).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:3});
+    return deliveryRoute.source==='mapa interno' ? `Percurso estimado da Praça do Relógio: ${distance} km. Taxa de entrega: ${fmtBRL(deliveryFee())}. Mapa interno.` : `Percurso da Praça do Relógio: ${distance} km. Taxa de entrega: ${fmtBRL(deliveryFee())}. Distância pelo Google Maps.`;
+  }
+  return 'Informe o endereço completo ou use sua localização para calcular a entrega.';
+}
+function renderDeliveryRoute() {
+  const city=document.getElementById('deliveryCity').value;
+  const button=document.getElementById('deliveryRouteRetry');
+  button.hidden=!isRouteCity(city)||deliveryRoute.status==='waiting';
+  button.disabled=deliveryRoute.status==='pending';
+  if (isRouteCity(city)) document.getElementById('deliveryFeeStatus').textContent=routeFeeStatus();
+  renderCartBar(); updateConfirmState();
+}
+function refreshDeliveryRoute(immediate=false) {
+  const target=deliveryRouteTarget();
+  const button=document.getElementById('deliveryRouteRetry');
+  button.hidden=!isRouteCity(document.getElementById('deliveryCity').value);
+  if (!target) {
+    if (deliveryRoute.key) resetDeliveryRoute();
+    button.disabled=false;
+    return Promise.resolve();
+  }
+  if (usesInternalRoutes() && deliveryMode==='other' && !target.location) {
+    if(deliveryRoute.key!==target.key)resetDeliveryRoute();
+    deliveryRoute={key:target.key,status:'waiting',distanceMeters:null};
+    button.hidden=true;button.disabled=false;
+    return Promise.resolve();
+  }
+  if (deliveryRoute.key===target.key) {
+    if (deliveryRoute.status!=='pending') return Promise.resolve();
+    if (deliveryRouteTask) return deliveryRouteTask;
+    if (!immediate) return Promise.resolve();
+    if (deliveryRouteTimer!==null) clearTimeout(deliveryRouteTimer);
+    deliveryRouteTimer=null;
+  } else {
+    resetDeliveryRoute();
+    const cached=deliveryRouteCache.get(target.key);
+    if (cached && Date.now()-cached.at<5*60*1000) {
+      deliveryRoute={key:target.key,status:'ready',distanceMeters:cached.distanceMeters,source:cached.source,distanceKind:cached.distanceKind};
+      button.disabled=false;
+      return Promise.resolve();
+    }
+    deliveryRoute={key:target.key,status:'pending',distanceMeters:null};
+  }
+  button.disabled=true;
+  const serial=deliveryRouteSerial;
+  if (deliveryMode==='other' && !immediate && !usesInternalRoutes()) {
+    deliveryRouteTimer=setTimeout(()=>{deliveryRouteTimer=null;void runDeliveryRoute(target,serial);},900);
+    return Promise.resolve();
+  }
+  return runDeliveryRoute(target,serial);
+}
+function runDeliveryRoute(target,serial) {
+  const controller=new AbortController();
+  deliveryRouteController=controller;
+  const timeout=setTimeout(()=>controller.abort(),20000);
+  const task=(async()=>{
+    try {
+      if(!usesInternalRoutes())await loadGoogleGeocoder();
+      if (controller.signal.aborted) throw new Error('Consulta cancelada');
+      const result=await window.CASA_DELIVERY_ROUTES.quote({...target,signal:controller.signal});
+      if (serial!==deliveryRouteSerial || deliveryRouteTarget()?.key!==target.key) return;
+      if (!Number.isFinite(result.distanceMeters) || result.distanceMeters<0) throw new Error('Percurso inválido');
+      deliveryRoute={key:target.key,status:'ready',distanceMeters:result.distanceMeters,source:result.source,distanceKind:result.distanceKind};
+      deliveryRouteCache.set(target.key,{distanceMeters:result.distanceMeters,source:result.source,distanceKind:result.distanceKind,at:Date.now()});
+    } catch(error) {
+      if (serial!==deliveryRouteSerial || deliveryRouteTarget()?.key!==target.key) return;
+      deliveryRoute={key:target.key,status:'error',distanceMeters:null};
+      // Não imprime a chave, o endereço ou a resposta inteira do provedor no console.
+      console.warn(usesInternalRoutes()?'Percurso não calculado no mapa interno. Confira o ponto e a cobertura das ruas.':'Consulta do percurso indisponível. Confira Maps JavaScript API, Routes API, faturamento e restrições da chave.');
+    } finally {
+      clearTimeout(timeout);
+      if (serial===deliveryRouteSerial) {
+        deliveryRouteController=null; deliveryRouteTask=null;
+        renderDeliveryRoute();
+      }
+    }
+  })();
+  deliveryRouteTask=task;
+  return task;
+}
+function retryDeliveryRoute() {
+  if(usesInternalRoutes() && deliveryMode==='other' && !deliveryRouteTarget()?.location)return openDeliveryPin();
+  const target=deliveryRouteTarget();
+  if (target) deliveryRouteCache.delete(target.key);
+  resetDeliveryRoute();
+  const task=refreshDeliveryRoute(true);
+  renderDeliveryRoute();
+  return task;
+}
+
 // Uma consulta de endereço por captura concluída, com cache e cancelamento.
 const REVERSE_GEOCODE_URL = 'https://nominatim.openstreetmap.org/reverse';
 const addressCache = new Map();
@@ -366,7 +523,7 @@ function loadGoogleGeocoder() {
       clearTimeout(timer);
       if (window.google?.maps?.Geocoder) resolve(window.google.maps.Geocoder); else fail();
     };
-    script.src = 'https://maps.googleapis.com/maps/api/js?' + new URLSearchParams({key:window.CASA_GOOGLE_MAPS_KEY,callback:'casaGoogleReady',language:'pt-BR',region:'BR',loading:'async'});
+    script.src = 'https://maps.googleapis.com/maps/api/js?' + new URLSearchParams({key:window.CASA_GOOGLE_MAPS_KEY,callback:'casaGoogleReady',v:'weekly',language:'pt-BR',region:'BR',loading:'async'});
     script.async = true; script.onerror = fail;
     timer = setTimeout(fail, 10000);
     document.head.appendChild(script);
@@ -389,6 +546,7 @@ function parseGoogleAddress(results) {
   return {street,neighborhood,city,neighborhoodApproximate:false,source:'Google Maps'};
 }
 async function googleLocation(location,signal) {
+  if(usesInternalRoutes())throw new Error('Google desativado; usando referências locais e fontes gratuitas');
   const Geocoder = await loadGoogleGeocoder();
   if (signal.aborted) throw new Error('Cancelado');
   return new Promise((resolve,reject) => {
@@ -406,9 +564,26 @@ async function googleLocation(location,signal) {
     });
   });
 }
+function priorityNeighborhood(location, city) {
+  const areas = window.CASA_NEIGHBORHOOD_REFERENCES?.priorityAreas || [];
+  if (city !== 'Barra do Garças' || !Number.isFinite(location.latitude) || !Number.isFinite(location.longitude)) return null;
+  const x=location.longitude,y=location.latitude;
+  for (const area of areas) {
+    if (area.city !== city || !Array.isArray(area.polygon) || area.polygon.length<3) continue;
+    let inside=false;
+    for(let i=0,j=area.polygon.length-1;i<area.polygon.length;j=i++) {
+      const [yi,xi]=area.polygon[i], [yj,xj]=area.polygon[j];
+      if((yi>y)!==(yj>y) && x<(xj-xi)*(y-yi)/(yj-yi)+xi) inside=!inside;
+    }
+    if(inside)return {name:area.name,distanceMeters:0,source:'referência da loja'};
+  }
+  return null;
+}
 function mappedNeighborhood(location, city) {
   const data = window.CASA_NEIGHBORHOOD_REFERENCES;
   if (city !== 'Barra do Garças' || !data || !Number.isFinite(location.latitude) || !Number.isFinite(location.longitude)) return null;
+  const priority=priorityNeighborhood(location,city);
+  if(priority)return priority;
   const radians = degrees => degrees * Math.PI / 180;
   let nearest = null;
   for (const point of data.points) {
@@ -498,6 +673,12 @@ async function fillLocationAddress(location, requestId) {
       // Não congela respostas incompletas: uma nova tentativa consulta de novo.
       if (address.city && (address.city !== 'Barra do Garças' || address.neighborhood)) addressCache.set(key, address);
     }
+    // Corrige também resultados completos do Google e respostas já em cache.
+    const priority=priorityNeighborhood(location,address.city);
+    if(priority) {
+      address={...address,neighborhood:priority.name,neighborhoodApproximate:true,neighborhoodSource:priority.source};
+      addressCache.set(key,address);
+    }
     if (requestId !== locationRequestId || deliveryMode !== 'current') return;
     deliveryAddressParts = {...address};
     if (field.value === initialValue) {
@@ -506,7 +687,12 @@ async function fillLocationAddress(location, requestId) {
     }
     suggestCity(address.city);
     suggestNeighborhood(address.neighborhood);
-    if (deliveryFee() === null) {
+    if (isRouteCity(address.city)) await refreshDeliveryRoute(true);
+    if (requestId !== locationRequestId || deliveryMode !== 'current') return;
+    if (isRouteCity(address.city)) {
+      status.textContent = 'Endereço preenchido automaticamente. Confira o ponto de entrega no mapa.';
+      renderDeliveryRoute();
+    } else if (deliveryFee() === null) {
       status.textContent = 'Não foi possível identificar a região de entrega. Toque em “Tentar novamente” para consultar a localização de novo.';
       document.getElementById('deliveryFeeStatus').textContent = 'Região não identificada. A taxa ainda não foi calculada.';
     } else {
@@ -531,6 +717,10 @@ function deliveryReady() {
     deliveryMode === 'other' && !!document.getElementById('custAddress').value.trim();
 }
 function selectDelivery(mode) {
+  manualDeliveryLocation=null;manualDeliveryAddressAtPin='';manualDeliveryCityAtPin='';
+  document.getElementById('deliveryPinPanel').hidden=true;document.getElementById('deliveryPinStatus').textContent='';
+  document.getElementById('deliveryPinOpen').hidden=true;
+  resetDeliveryRoute();
   document.getElementById('deliveryCity').value = '';
   document.getElementById('deliveryNeighborhood').value = '';
   document.getElementById('otherNeighborhood').value = '';
@@ -628,7 +818,7 @@ function updateConfirmState() {
 
   document.getElementById('cartTotal').textContent = fmtBRL(orderTotal());
   document.getElementById('cartProductsTotal').textContent = fmtBRL(cartTotal());
-  document.getElementById('cartDeliveryFee').textContent = deliveryFee()===null ? 'Selecione o local' : deliveryFee()===0 ? 'GRÁTIS' : fmtBRL(deliveryFee());
+  document.getElementById('cartDeliveryFee').textContent = deliveryFee()===null ? (isRouteCity(document.getElementById('deliveryCity').value) && deliveryRoute.status==='pending' ? 'Calculando…' : 'Selecione o local') : deliveryFee()===0 ? 'GRÁTIS' : fmtBRL(deliveryFee());
   document.getElementById('cartConfirmBtn').disabled = !(hasItems && name && payment && deliveryReady() && deliveryFee() !== null && change.valid);
 }
 
@@ -695,6 +885,7 @@ function confirmOrder() {
     msg += `Endereço: ${deliveryAddressForMessage(document.getElementById('custAddress').value.trim())}`;
     const complement = document.getElementById('custComplement').value.trim();
     if (complement) msg += `\nComplemento: ${complement}`;
+    if(usesInternalRoutes() && manualDeliveryLocation)msg += `\nLocalização: https://www.google.com/maps?q=${manualDeliveryLocation.latitude},${manualDeliveryLocation.longitude}`;
   }
 
   if (selectedNeighborhood()) msg += `\nBairro: ${selectedNeighborhood()}`;

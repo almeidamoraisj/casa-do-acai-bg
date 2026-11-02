@@ -766,7 +766,7 @@ button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline
 .delivery-options{border:0;min-width:0;}
 .delivery-options legend{font-size:.8rem;font-weight:800;color:var(--cream-dim);margin-bottom:10px;}
 .delivery-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.delivery-buttons button,#locationRetry{font:700 .8rem 'Nunito',sans-serif;color:var(--cream);background:var(--bg-panel-2);border:1px solid var(--line);border-radius:10px;padding:12px 10px;cursor:pointer;}
+.delivery-buttons button,#locationRetry,#deliveryRouteRetry{font:700 .8rem 'Nunito',sans-serif;color:var(--cream);background:var(--bg-panel-2);border:1px solid var(--line);border-radius:10px;padding:12px 10px;cursor:pointer;}
 .delivery-buttons button[aria-pressed="true"]{background:var(--magenta);border-color:var(--magenta-bright);}
 #locationPanel,#addressPanel{margin-top:14px;}
 [hidden]{display:none!important;}
@@ -848,3 +848,10 @@ button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline
  background:transparent;
 }
 @media(max-width:600px){.hero-logo{--logo-size:min(66vw,240px);width:var(--logo-size);height:var(--logo-size);}}
+
+#deliveryRouteRetry{margin-top:8px;}
+#deliveryRouteRetry:disabled{opacity:.6;cursor:wait;}
+
+#deliveryPinOpen,.delivery-map-controls button{font:700 .8rem 'Nunito',sans-serif;color:var(--cream);background:var(--bg-panel-2);border:1px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;}
+#deliveryPinCanvas{display:block;width:100%;height:auto;max-height:360px;touch-action:none;border-radius:10px;margin-top:10px;}
+.delivery-map-controls{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}

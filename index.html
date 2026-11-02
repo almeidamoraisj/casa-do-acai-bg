@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=94af6a557d74">
+<link rel="stylesheet" href="style.css?v=20261102-local">
 </head>
 <body>
 
@@ -27,6 +27,7 @@
       <span>SEG · QUA · QUI · SEX · SÁB · DOM</span><span>14H ÀS 23H</span>
     </div>
     <img class="hero-logo" src="assets/marca/logo-casa-acai.webp" alt="Casa do Açaí BG" width="640" height="640" fetchpriority="high" decoding="async">
+    <h1>Açaí de verdade,<br><span>sem economia</span> de fruta.</h1>
     <p class="sub">Marmitas de 750ml, copos de 300 a 600ml e o Copo da Casa — tudo montado na hora, do jeito que você pedir.</p>
     <div class="hero-actions">
       <a href="#marmitas" class="btn-primary">Marmitas</a>
@@ -173,6 +174,19 @@
           <label>Endereço de entrega
             <textarea id="custAddress" rows="3" placeholder="Rua - Bairro - Cidade" oninput="syncOtherAddress()"></textarea>
           </label>
+          <button type="button" id="deliveryPinOpen" onclick="openDeliveryPin()" hidden>Marcar entrega no mapa</button>
+          <p id="deliveryPinStatus" class="delivery-help" role="status"></p>
+          <div id="deliveryPinPanel" hidden>
+            <p class="delivery-help">Toque no ponto da entrega. Arraste o mapa e use +/− para aproximar. Depois toque em “Usar este ponto”.</p>
+            <canvas id="deliveryPinCanvas" width="720" height="440" tabindex="0" aria-label="Mapa da entrega: arraste ou use as setas para mover; Enter marca o centro"></canvas>
+            <div class="delivery-map-controls">
+              <button type="button" id="deliveryPinZoomIn" aria-label="Aproximar mapa">+</button>
+              <button type="button" id="deliveryPinZoomOut" aria-label="Afastar mapa">−</button>
+              <button type="button" id="deliveryPinUse">Usar este ponto</button>
+              <button type="button" id="deliveryPinCancel">Fechar mapa</button>
+            </div>
+            <p class="delivery-help">Mapa local aproximado · © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a></p>
+          </div>
           <label>Complemento (opcional)
             <input id="custComplement" type="text" placeholder="Apartamento, bloco ou ponto de referência">
           </label>
@@ -192,7 +206,8 @@
           <input id="otherNeighborhood" placeholder="Digite seu bairro" oninput="updateNeighborhood()">
         </label>
         </details>
-        <p id="deliveryFeeStatus" class="delivery-help" role="status">Identificando a região da entrega…</p>
+        <p id="deliveryFeeStatus" class="delivery-help" role="status" aria-live="polite">Identificando a região da entrega…</p>
+        <button type="button" id="deliveryRouteRetry" onclick="retryDeliveryRoute()" hidden>Recalcular entrega</button>
       </fieldset>
 
       <label>Observação (opcional)
@@ -219,7 +234,10 @@
 </aside>
 
 <script src="google-maps-config.js?v=c1c6724085e7"></script>
-<script src="bairros-referencia.js?v=4c36b80827c0"></script>
-<script src="script.js?v=beec85511e11"></script>
+<script src="bairros-referencia.js?v=20261102-local"></script>
+<script src="internal-routing.js?v=20261102-local"></script>
+<script src="delivery-map.js?v=20261102-local"></script>
+<script src="delivery-routes.js?v=20261102-local"></script>
+<script src="script.js?v=20261102-local"></script>
 </body>
 </html>
