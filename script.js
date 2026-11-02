@@ -6,6 +6,18 @@ function matchNeighborhood(value) {
   const aliases = {jardimsenamarques:'Sena Marques'};
   return aliases[normalized] || FREE_DELIVERY_NEIGHBORHOODS.find(name=>normalizeNeighborhood(name)===normalized) || '';
 }
+const SPECIAL_DELIVERY_FEES = Object.freeze(window.CASA_NEIGHBORHOOD_REFERENCES?.specialFees || {'Morada do Sol':10,'Condomínio Parque da Serra':12,'Recanto das Acácias':12,'Anchieta':12,'Residencial Águas Quentes':15});
+function paidNeighborhood(value) {
+  const normalized=normalizeNeighborhood(value);
+  const aliases={jardimmoradadosol:'Morada do Sol',jdmoradadosol:'Morada do Sol',residencialmoradadosol:'Morada do Sol',lotmoradadosol:'Morada do Sol',loteamentomoradadosol:'Morada do Sol'};
+  const knownAliases={...aliases,parquedaserra:'Condomínio Parque da Serra',residencialparquedaserra:'Condomínio Parque da Serra',loteamentorecantodasacacias:'Recanto das Acácias',aguasquentes:'Residencial Águas Quentes',resaguasquentes:'Residencial Águas Quentes'};
+  return knownAliases[normalized] || Object.keys(SPECIAL_DELIVERY_FEES).find(name=>normalizeNeighborhood(name)===normalized) || '';
+}
+function neighborhoodFee(value) {
+  if(!value)return null;
+  const paid=paidNeighborhood(value);
+  return paid ? SPECIAL_DELIVERY_FEES[paid] : matchNeighborhood(value) ? 0 : 6;
+}
 const DELIVERY_CITIES = ['Barra do Garças','Pontal do Araguaia','Aragarças'];
 function suggestCity(value) {
   document.getElementById('deliveryCity').value = DELIVERY_CITIES.find(city=>normalizeNeighborhood(city)===normalizeNeighborhood(value)) || '';
@@ -18,7 +30,7 @@ function deliveryFee() {
     if (!target || deliveryRoute.key!==target.key || deliveryRoute.status!=='ready') return null;
     return window.CASA_DELIVERY_ROUTES?.feeForDistance(city,deliveryRoute.distanceMeters) ?? null;
   }
-  if (city==='Barra do Garças') return !selectedNeighborhood() ? null : matchNeighborhood(selectedNeighborhood()) ? 0 : 6;
+  if (city==='Barra do Garças') return neighborhoodFee(selectedNeighborhood());
   return null;
 }
 function orderTotal() { return cartTotal() + (deliveryFee() ?? 0); }
@@ -35,7 +47,7 @@ function syncOtherAddress() {
 function selectedNeighborhood() { const value=document.getElementById('deliveryNeighborhood').value; return value==='other' ? document.getElementById('otherNeighborhood').value.trim() : value; }
 function suggestNeighborhood(value) {
   const select=document.getElementById('deliveryNeighborhood');
-  const match=matchNeighborhood(value);
+  const match=matchNeighborhood(value) || paidNeighborhood(value);
   select.value=match || (value ? 'other' : '');
   document.getElementById('otherNeighborhood').value=match ? '' : value;
   updateNeighborhood();
@@ -53,7 +65,7 @@ function updateNeighborhood() {
   renderCartBar();
   updateConfirmState();
 }
-function buildNeighborhoodOptions() { document.getElementById('deliveryNeighborhood').innerHTML='<option value="">Selecione o bairro</option>'+FREE_DELIVERY_NEIGHBORHOODS.map(name=>`<option value="${name}">${name}</option>`).join('')+'<option value="other">Outro bairro</option>'; }
+function buildNeighborhoodOptions() { document.getElementById('deliveryNeighborhood').innerHTML='<option value="">Selecione o bairro</option>'+[...FREE_DELIVERY_NEIGHBORHOODS,...Object.keys(SPECIAL_DELIVERY_FEES)].map(name=>`<option value="${name}">${name}</option>`).join('')+'<option value="other">Outro bairro</option>'; }
 // O link enviado pela automação identifica o próprio remetente, sem digitação.
 const customerPhone = /(?:^|[?&])contato=(\d{10,15})(?:&|$)/.exec(window.location?.search || '')?.[1] || '';
 function customerContactText(phone) {
@@ -587,6 +599,8 @@ function mappedNeighborhood(location, city) {
   const radians = degrees => degrees * Math.PI / 180;
   let nearest = null;
   for (const point of data.points) {
+    // Bairros de taxa especial não se expandem por proximidade para fora do contorno.
+    if(point.boundaryOnly)continue;
     const dy = radians(point.latitude - location.latitude), dx = radians(point.longitude - location.longitude);
     const h = Math.sin(dy/2)**2 + Math.cos(radians(location.latitude))*Math.cos(radians(point.latitude))*Math.sin(dx/2)**2;
     const distance = 6371000 * 2 * Math.asin(Math.sqrt(Math.min(1,h)));
