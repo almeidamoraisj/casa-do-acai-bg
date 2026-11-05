@@ -61,7 +61,7 @@ function updateNeighborhood() {
   const fee=deliveryFee();
   document.getElementById('deliveryCorrection').hidden = deliveryMode === 'current';
   document.getElementById('deliveryCorrection').open = fee === null && deliveryMode !== 'current' && !isRouteCity(document.getElementById('deliveryCity').value);
-  document.getElementById('deliveryFeeStatus').textContent=isRouteCity(document.getElementById('deliveryCity').value) ? routeFeeStatus() : fee===null ? (deliveryMode === 'current' ? 'Aguardando identificação automática do bairro e da cidade.' : 'Selecione a cidade e o bairro da entrega.') : fee===0 ? 'Entrega grátis para este bairro.' : `Taxa de entrega: ${fmtBRL(fee)}`;
+  setDeliveryFeeStatus(isRouteCity(document.getElementById('deliveryCity').value) ? routeFeeStatus() : fee===null ? (deliveryMode === 'current' ? 'Aguardando identificação automática do bairro e da cidade.' : 'Selecione a cidade e o bairro da entrega.') : fee===0 ? 'Entrega grátis para este bairro.' : `Taxa de entrega: ${fmtBRL(fee)}`);
   renderCartBar();
   updateConfirmState();
 }
@@ -368,32 +368,33 @@ function resetDeliveryRoute() {
   deliveryRouteController=null; deliveryRouteTask=null;
   deliveryRoute={key:'',status:'idle',distanceMeters:null};
 }
+function setDeliveryFeeStatus(message) {
+  const status=document.getElementById('deliveryFeeStatus');
+  status.textContent=message;
+  status.hidden=!message;
+}
 function routeFeeStatus() {
   if (deliveryRoute.status==='waiting') return 'Marque o ponto da entrega no mapa para calcular a taxa.';
-  if (deliveryRoute.status==='pending') return 'Calculando o percurso da Praça do Relógio até a entrega…';
+  if (deliveryRoute.status==='pending') return 'Calculando entrega…';
   if (deliveryRoute.status==='error') return 'Não foi possível calcular a entrega. Confira o endereço ou toque em “Recalcular entrega”.';
-  if (deliveryRoute.status==='ready' && deliveryFee()!==null) {
-    if(deliveryRoute.distanceKind==='minimum')return `Entrega fora da faixa próxima da Praça do Relógio. Taxa de entrega: ${fmtBRL(deliveryFee())}.`;
-    const distance=(deliveryRoute.distanceMeters/1000).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:3});
-    return deliveryRoute.source==='mapa interno' ? `Percurso estimado da Praça do Relógio: ${distance} km. Taxa de entrega: ${fmtBRL(deliveryFee())}. Mapa interno.` : `Percurso da Praça do Relógio: ${distance} km. Taxa de entrega: ${fmtBRL(deliveryFee())}. Distância pelo Google Maps.`;
-  }
+  if (deliveryRoute.status==='ready' && deliveryFee()!==null) return '';
   return 'Informe o endereço completo ou use sua localização para calcular a entrega.';
 }
 function renderDeliveryRoute() {
   const city=document.getElementById('deliveryCity').value;
   const button=document.getElementById('deliveryRouteRetry');
-  button.hidden=!isRouteCity(city)||deliveryRoute.status==='waiting';
+  button.hidden=!isRouteCity(city)||deliveryRoute.status!=='error';
   button.disabled=deliveryRoute.status==='pending';
-  if (isRouteCity(city)) document.getElementById('deliveryFeeStatus').textContent=routeFeeStatus();
+  if (isRouteCity(city)) setDeliveryFeeStatus(routeFeeStatus());
   renderCartBar(); updateConfirmState();
 }
 function refreshDeliveryRoute(immediate=false) {
   const target=deliveryRouteTarget();
   const button=document.getElementById('deliveryRouteRetry');
-  button.hidden=!isRouteCity(document.getElementById('deliveryCity').value);
+  button.hidden=!isRouteCity(document.getElementById('deliveryCity').value)||deliveryRoute.status!=='error';
   if (!target) {
     if (deliveryRoute.key) resetDeliveryRoute();
-    button.disabled=false;
+    button.disabled=false;button.hidden=true;
     return Promise.resolve();
   }
   if (usesInternalRoutes() && deliveryMode==='other' && !target.location) {
@@ -413,10 +414,11 @@ function refreshDeliveryRoute(immediate=false) {
     const cached=deliveryRouteCache.get(target.key);
     if (cached && Date.now()-cached.at<5*60*1000) {
       deliveryRoute={key:target.key,status:'ready',distanceMeters:cached.distanceMeters,source:cached.source,distanceKind:cached.distanceKind};
-      button.disabled=false;
+      button.disabled=false;button.hidden=true;
       return Promise.resolve();
     }
     deliveryRoute={key:target.key,status:'pending',distanceMeters:null};
+    button.hidden=true;
   }
   button.disabled=true;
   const serial=deliveryRouteSerial;
@@ -708,7 +710,7 @@ async function fillLocationAddress(location, requestId) {
       renderDeliveryRoute();
     } else if (deliveryFee() === null) {
       status.textContent = 'Não foi possível identificar a região de entrega. Toque em “Tentar novamente” para consultar a localização de novo.';
-      document.getElementById('deliveryFeeStatus').textContent = 'Região não identificada. A taxa ainda não foi calculada.';
+      setDeliveryFeeStatus('Região não identificada. A taxa ainda não foi calculada.');
     } else {
       status.textContent = address.neighborhoodSource === 'mapa cadastral' ? 'Bairro preenchido automaticamente por referência próxima do mapa cadastral (aproximado). Confira o ponto de entrega.' : address.neighborhoodApproximate ? 'Endereço preenchido automaticamente; bairro identificado pela região próxima. Confira o ponto no mapa.' : 'Endereço e taxa preenchidos automaticamente. Confira o ponto no mapa.';
     }
@@ -717,7 +719,7 @@ async function fillLocationAddress(location, requestId) {
   } catch (error) {
     if (requestId === locationRequestId && deliveryMode === 'current') {
       status.textContent = 'A consulta da região falhou. Toque em “Tentar novamente”.';
-      document.getElementById('deliveryFeeStatus').textContent = 'Não foi possível calcular a taxa pela localização.';
+      setDeliveryFeeStatus('Não foi possível calcular a taxa pela localização.');
       document.getElementById('locationRetry').hidden = false;
     }
   } finally {
@@ -739,7 +741,7 @@ function selectDelivery(mode) {
   document.getElementById('deliveryNeighborhood').value = '';
   document.getElementById('otherNeighborhood').value = '';
   document.getElementById('otherNeighborhoodLabel').hidden = true;
-  document.getElementById('deliveryFeeStatus').textContent = 'Identificando a região da entrega…';
+  setDeliveryFeeStatus('Identificando a região da entrega…');
   document.getElementById('deliveryCorrection').hidden = mode === 'current';
   const requestId = ++locationRequestId;
   stopLocationCapture();
